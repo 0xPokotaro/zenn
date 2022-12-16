@@ -5,9 +5,8 @@ type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Blockchain", "SmartContract", "Ethereum", "Hardhat"]
 published: true
 ---
-## Hardhat
-
 ![](/images/hardhat-article-1/hardhat.jpeg)
+## Hardhat
 
 EVM（Ethereum Virtual Machine）に対応したスマートコントラクトの開発環境ツールです。
 
