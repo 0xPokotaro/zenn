@@ -7,6 +7,8 @@ published: true
 ---
 ## Hardhat
 
+![](/images/hardhat-article-1/hardhat.jpeg)
+
 EVM（Ethereum Virtual Machine）に対応したスマートコントラクトの開発環境ツールです。
 
 公式：<https://hardhat.org/>
