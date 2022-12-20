@@ -3,7 +3,7 @@ title: "ERC721: TwitFiNFTのスマコンを見てみた"
 emoji: "💭"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Blockchain", "SmartContract", "Ethereum", "NFT"]
-published: false
+published: true
 ---
 ## 概要
 
@@ -25,7 +25,7 @@ TwitFiNFT (ERC721) <https://etherscan.io/token/0x94cce07f299945cfe80e309c85cb0a7
 
 Compiler Version 0.8.17
 
-#### imports
+### imports
 
 - ERC721
 - ERC721Enumerable: ERC721の拡張版
@@ -33,21 +33,98 @@ Compiler Version 0.8.17
 - AccessControl: アクセス制御
 - DefaultOperatorFilterer: 
 
-#### Functions
+### Struct
 
-#### setBaseURI
+トークンに紐づけられている情報がSolidity内で構造体 (Struct) として定義されています。
+
+- tokenList
+  - creator: mintをしたアドレス (ミント時に設定される)
+  - id: トークンID (ミント時に設定される)
+  - issueDate: 発行日時 Unixtime
+  - modifyDate: 属性情報が更新された日時 Unixtime
+  - tranferCount: 転送回数 (transferされると 1 増加する)
+  - _type: TwiFiNFTプロジェクトで設定しているNFTタイプ
+
+### Functions
+
+#### tokenInfo
+
+[Etherscan - tokenInfo](https://etherscan.io/token/0x94cce07f299945cfe80e309c85cb0a784b3ee6c2#readContract) から、調べたいトークンIDを入力してQueryボタンを押すと、トークンに紐づけられている情報が確認できます。
 
 ```solidity
 
-/// @dev 新しいベースURIを設定する関数
-/// @param newBaseURI 新しく設定するURI
-function setBaseURI(string memory newBaseURI) public onlyOwner () {
-    baseURI = newBaseURI;
+/// @dev トークン(NFT)に紐づけられている属性情報を返却する関数
+/// @param tokenId 調べたいトークンID
+function tokenInfo(uint256 tokenId) public view existingToken(tokenId) returns (TokenList memory) {
+    TokenList memory token = _listTokens[tokenId];
+    return token;
 }
 ```
-#### ApproveとTransfer
+
+#### mint
+
+鳥NFTをミントした時に実行される関数です。
+
+```solidity
+/// @dev NFTを新しく発行する関数
+/// @param _receiver 新しく発行したNFTを受け取るアドレス
+/// @param _type トークンに紐づけるタイプ
+/// @param _tokenId 新しく発行するトークンID
+function mint(address _receiver, string memory _type, uint256 _tokenId) external onlyMinter {
+    _mintToken(_receiver, _type, _tokenId);
+}
+```
+
+#### bulkMint
+
+```solidity
+/// @dev 一括でNFTを新しく発行する関数
+/// @param _tos 新しく発行したNFTを受け取るアドレスのリスト
+/// @param _types トークンに紐づけるタイプのリスト
+/// @param _tokenIds 新しく発行するトークンIDのリスト
+function bulkMint(address[] memory _tos, string[] memory _types, uint256[] memory _tokenIds) external onlyMinter {
+    uint8 i;
+    for (i = 0; i < _tos.length; i++) {
+        _mintToken(_tos[i], _types[i], _tokenIds[i]);
+    }
+}
+```
+
+#### burn
+
+```solidity
+/// @dev トークンID (NFT) を破棄する関数
+/// @param tokenId 破棄するトークンID
+function burn(uint256 tokenId) public virtual {
+    require(_isApprovedOrOwner(_msgSender(), tokenId), "burn caller is not owner nor approved");
+    _burn(tokenId);
+}
+```
+
+#### withdraw
+
+オーナー (TwitFiプロジェクト運営)しか実行できない関数です。
+
+```solidity
+/// @dev コントラクト上にステーキングしているトークンを回収する関数
+function withdraw() public onlyOwner {
+    uint amount = address(this).balance;
+    require(amount > 0, "Insufficient balance");
+    (bool success, ) = payable(owner()).call {
+        value: amount
+    }("");
+
+    require(success, "Failed to send Matic");
+}
+```
+
+#### Approve
 
 onlyAllowedOperatorApprovalが追加されている。
+
+[ProjectOpenSea/operator-filter-registry](https://github.com/ProjectOpenSea/operator-filter-registry#filtered-addresses) OpenSeaが提供しているブラックリストをフィルターする機能。
+
+登録されているアドレス宛には実行できなくすることができる。
 
 ```solidity
 function setApprovalForAll(address operator, bool approved) public override(ERC721, IERC721) onlyAllowedOperatorApproval(operator) {
@@ -57,7 +134,15 @@ function setApprovalForAll(address operator, bool approved) public override(ERC7
 function approve(address operator, uint256 tokenId) public override(ERC721, IERC721) onlyAllowedOperatorApproval(operator) {
     super.approve(operator, tokenId);
 }
+```
 
+#### Transfer
+
+onlyAllowedOperatorが追加されている。
+
+Approveと同じくフィルター機能が追加されている。
+
+```solidity
 function transferFrom(address from, address to, uint256 tokenId) public override(ERC721, IERC721) onlyAllowedOperator(from) {
     super.transferFrom(from, to, tokenId);
 }
@@ -71,15 +156,7 @@ function safeTransferFrom(address from, address to, uint256 tokenId, bytes memor
 }
 ```
 
-#### 
-
-```solidity
-
-function tokenInfo(uint256 tokenId) public view existingToken(tokenId) returns (TokenList memory) {
-        TokenList memory token = _listTokens[tokenId];
-        return token;
-    }
-```
+### 全体ソースコード
 
 ```solidity
 // SPDX-License-Identifier: GPL-3.0
@@ -229,3 +306,9 @@ contract TwitFiNFT is DefaultOperatorFilterer, ERC721Enumerable, Ownable, Access
     receive() payable external {}
 }
 ```
+
+### まとめ
+
+最新バージョンのコンパイラーが使用されていたり、フィルター機能も実装されていたりと、比較的新しい技術が使われている印象でした。
+
+時間がある時に、ERC20のコードも見ていきたいと思います。
