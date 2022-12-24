@@ -17,7 +17,7 @@ TwitFiは、ツイートをしてBirdNFTを育てて、TWTトークンを稼い�
 
 公式 <https://twitfi.com/>
 
-TwitFi (ERC20) <https://etherscan.io/token/0xd4df22556e07148e591b4c7b4f555a17188cf5cf#code>
+TwitFi (ERC20)<https://etherscan.io/token/0xd4df22556e07148e591b4c7b4f555a17188cf5cf#code>
 
 TwitFiNFT (ERC721) <https://etherscan.io/token/0x94cce07f299945cfe80e309c85cb0a784b3ee6c2#code>
 
@@ -78,7 +78,46 @@ Compiler Version 0.8.17
 
 ```solidity
 function pause() public onlyOwner {
-    // _paused = false となる。
+    // bool _paused = false となる。
     _pause();
+}
+```
+
+### unpause
+
+指定の関数を実行再開する関数です。
+
+```solidity
+function unpause() public onlyOwner {
+    // bool _paused = true となる。
+    _unpause();
+}
+```
+
+### mint
+
+TWTトークンをミントする関数です。
+
+```solidity
+/// @param _to ミントされたトークンの送り先
+/// @param _amount ミントする総額
+function mint(address _to, uint256 _amount) public onlyOwner {
+    _mint(_to, _amount);
+}
+```
+
+### addPairs
+
+ペアを追加、削除する関数です。
+
+```solidity
+/// @param toPair ペアに追加するアドレス
+/// @param _enable 有効フラグ
+function addPairs(address toPair, bool _enable) public onlyOwner {
+    // 既に登録済みのアドレスはエラー
+    require(!pairs[toPair], "This pair is already excluded");
+
+    // ペアを追加
+    pairs[toPair] = _enable;
 }
 ```
