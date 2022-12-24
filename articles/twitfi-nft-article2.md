@@ -74,7 +74,7 @@ Compiler Version 0.8.17
 
 ### 関数のソースコード
 
-### pause
+#### pause
 
 指定の関数を実行できなくする関数です。
 
@@ -85,7 +85,7 @@ function pause() public onlyOwner {
 }
 ```
 
-### unpause
+#### unpause
 
 指定の関数を実行再開する関数です。
 
@@ -96,7 +96,7 @@ function unpause() public onlyOwner {
 }
 ```
 
-### mint
+#### mint
 
 TWTトークンをミントする関数です。
 
@@ -108,7 +108,7 @@ function mint(address _to, uint256 _amount) public onlyOwner {
 }
 ```
 
-### addPairs
+#### addPairs
 
 ペアを追加、削除する関数です。
 
@@ -124,7 +124,7 @@ function addPairs(address toPair, bool _enable) public onlyOwner {
 }
 ```
 
-### setLiquidityFeePercent
+#### setLiquidityFeePercent
 
 流動性手数料を設定する関数です。
 
@@ -141,7 +141,7 @@ function setLiquidityFeePercent(
 }
 ```
 
-### setBurnFee
+#### setBurnFee
 
 破棄する手数料を設定する関数です。
 
@@ -153,7 +153,7 @@ function setBurnFee(uint256 burnFee) external onlyOwner {
 }
 ```
 
-### manualswap
+#### manualswap
 
 コントラクト上で保持しているTWTを全てETHにスワップする関数です。
 
@@ -166,7 +166,7 @@ function manualswap() external onlyOwner {
 }
 ```
 
-### manualBurn
+#### manualBurn
 
 TWTを破棄する関数です。
 
@@ -178,7 +178,7 @@ function manualBurn(uint256 amount) public virtual onlyOwner {
 }
 ```
 
-### openTrading
+#### openTrading
 
 トレードを開始する関数です。
 
@@ -207,7 +207,7 @@ function openTrading() external onlyOwner() {
 }
 ```
 
-### withdraw
+#### withdraw
 
 コントラクト上で保持しているETHを全てオーナーに送金する関数です。
 
