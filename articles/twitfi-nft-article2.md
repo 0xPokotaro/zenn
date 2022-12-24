@@ -70,6 +70,15 @@ Compiler Version 0.8.17
 
 ※1. コントラクト作成時に使用されたアカウントがオーナーとなる。[コントラクト作成時のトランザクション](https://etherscan.io/tx/0x506ffb8e80724507fd87f3de42e7e2939655748171e25b762297944659156905)：Fromが当該コントラクトのオーナーです。
 
+### 関数のソースコード
+
 ### pause
 
-### unpause
+指定の関数を実行できなくする関数です。
+
+```solidity
+function pause() public onlyOwner {
+    // _paused = false となる。
+    _pause();
+}
+```
