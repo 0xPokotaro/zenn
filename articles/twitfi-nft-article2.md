@@ -3,7 +3,7 @@ title: "ERC20: TwitFiのスマコンを見てみた"
 emoji: "💭"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Blockchain", "SmartContract", "Ethereum", "仮想通貨"]
-published: false
+published: true
 ---
 ## 概要
 
@@ -100,7 +100,7 @@ TWTトークンをミントする関数です。
 
 ```solidity
 /// @param _to ミントされたトークンの送り先
-/// @param _amount ミントする総額
+/// @param _amount ミントするトークン量
 function mint(address _to, uint256 _amount) public onlyOwner {
     _mint(_to, _amount);
 }
@@ -121,3 +121,106 @@ function addPairs(address toPair, bool _enable) public onlyOwner {
     pairs[toPair] = _enable;
 }
 ```
+
+### setLiquidityFeePercent
+
+流動性手数料を設定する関数です。
+
+```solidity
+/// @param liquidityFee 新しく設定する手数料
+function setLiquidityFeePercent(
+    uint256 liquidityFee
+)
+    external
+    onlyOwner
+{
+    // 手数料を更新
+    _liquidityFee = liquidityFee;
+}
+```
+
+### setBurnFee
+
+破棄する手数料を設定する関数です。
+
+```solidity
+/// @param burnFee 新しく設定する手数料
+function setBurnFee(uint256 burnFee) external onlyOwner {
+    // 手数料を更新
+    _burnFee = burnFee;
+}
+```
+
+### manualswap
+
+コントラクト上で保持しているTWTを全てETHにスワップする関数です。
+
+```solidity
+function manualswap() external onlyOwner {
+    // コントラクトで保持しているTWT残高を取得
+    uint256 contractBalance = balanceOf(address(this));
+    // 取得した残高をETHにスワップ
+    swapTokensForEth(contractBalance);
+}
+```
+
+### manualBurn
+
+TWTを破棄する関数です。
+
+```solidity
+/// @param amount 破棄するトークン量
+function manualBurn(uint256 amount) public virtual onlyOwner {
+    // 指定されたトークン量を破棄する
+    _burn(address(this), amount);
+}
+```
+
+### openTrading
+
+トレードを開始する関数です。
+
+```solidity
+function openTrading() external onlyOwner() {
+    // 既に開始されている場合はエラー
+    require(!tradingOpen, "Trading is already open");
+
+    // TwitFiからUniswapを送金することをApprove
+    _approve(address(this), address(uniswapV2Router), balanceOf(address(this)));
+
+    // TwitFiとWETHのペアを作成
+    uniswapV2Pair = IUniswapV2Factory(uniswapV2Router.factory()).createPair(address(this), uniswapV2Router.WETH());
+
+    // LPトークンを生成
+    uniswapV2Router.addLiquidityETH{value: address(this).balance}(address(this), balanceOf(address(this)), 0, 0, owner(), block.timestamp);
+
+    // トレードをオープン
+    tradingOpen = true;
+
+    // ペアにuniswapV2Pair(LPトークン)を追加
+    pairs[uniswapV2Pair] = true;
+}
+```
+
+### withdraw
+
+コントラクト上で保持しているETHを全てオーナーに送金する関数です。
+
+```solidity
+function withdraw() public onlyOwner {
+    // コントラクトに保持されているETHを取得
+    uint amount = address(this).balance;
+
+    // 残高をオーナーに送金
+    (bool success, ) = payable(owner()).call {
+        value: amount
+    }("");
+
+    // 送金チェック
+    require(success, "Failed to send Ether");
+}
+```
+
+### まとめ
+
+非常にシンプルなコントラクトですが、送金 (transfer) に停止機能が実装されていたので、トレードされる方は注意が必要です。
