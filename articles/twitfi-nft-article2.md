@@ -3,7 +3,7 @@ title: "ERC20: TwitFiのスマコンを見てみた"
 emoji: "💭"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Blockchain", "SmartContract", "Ethereum", "仮想通貨"]
-published: true
+published: false
 ---
 ## 概要
 
@@ -68,6 +68,8 @@ Compiler Version 0.8.17
 - _transfer: TWTを送金処理する際の内部関数
 - _beforeTokenTransfer: TWTをmint,burnを処理する際の内部関数
 
-※1. コントラクト作成時に使用されたアカウントがオーナーとなる。
+※1. コントラクト作成時に使用されたアカウントがオーナーとなる。[コントラクト作成時のトランザクション](https://etherscan.io/tx/0x506ffb8e80724507fd87f3de42e7e2939655748171e25b762297944659156905)：Fromが当該コントラクトのオーナーです。
 
-[コントラクト作成時のトランザクション](https://etherscan.io/tx/0x506ffb8e80724507fd87f3de42e7e2939655748171e25b762297944659156905)：Fromが当該コントラクトのオーナーです。
+### pause
+
+### unpause
