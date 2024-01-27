@@ -87,11 +87,11 @@ $ yarn add xrpl
 import xrpl from xrpl
 ```
 
-## 4. Class Client
+## 4. 使用方法
 
 rippledサーバーと対話するためのクライアントです。
 
-### 4.1. 使い方
+### 4.1. クライアントの使い方
 
 #### 構文
 
