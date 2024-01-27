@@ -6,15 +6,15 @@ topics: ["XRPL", "xrpljs", "web3", "blockchain"]
 published: false
 ---
 
-## はじめに
+## 1. はじめに
 
-### xrpl.jsとは何か？
+### 1.1. xrpl.jsとは何か？
 
 xrpl.jsは、JavaScript/TypeScriptでXRP Ledgerを操作するためのライブラリです。
 
 このライブラリを使用することで、XRP Ledger上でトランザクションを生成、署名、送信し、その他の多くの機能を実行することが可能になります。
 
-### この記事で学べること
+### 1.2. この記事で学べること
 
 - xrpl.jsのセットアップと使用方法
 - 基本的なトランザクションの作成と管理
@@ -22,13 +22,41 @@ xrpl.jsは、JavaScript/TypeScriptでXRP Ledgerを操作するためのライブ
 - セキュリティと最適化
 - 実例と実践
 
-## xrpl.jsのセットアップ
+## 1. 基礎知識
 
-### 必要なツールと環境
+### 1.1. ネットワークの種類
 
-### インストールと初期設定
+これらのテストネットワークは、実際の資金を使用せずにXRP Ledgerのテストを行うことができます。
 
-以下のコマンドでxrpl.jsをインストールします。
+|ネットワーク|WebSocket|説明|
+|:---|:---|:--|
+|Testnet|wss://s.altnet.rippletest.net:51233/|メインネット同等|
+|Devnet|wss://s.devnet.rippletest.net:51233/|今後の修正予定の機能を反映。|
+|Xahau-Testnet|wss://xahau-test.net/|フックすが有効なテストネット|
+
+#### XRP Faucets
+
+XRP Ledgerテストネットワークのトークンを発行できるサイト
+
+https://xrpl.org/ja/xrp-testnet-faucet.html
+
+### 1.2. アドレスの種類
+
+|アドレス|サンプル|説明|
+|:---|:---|:--|
+|PublicKey|ED1AA872636AD6ED618AAECB7F387F2234155A28FD89193DE344B6CD4BC4B76C1A|メインネット同等|
+|PrivateKey|ED2A2DD166BB2A391BFC76B841A57AC019562FCF8AF5CE22315193A2BBC7688D7C|今後の修正予定の機能を反映。|
+|ClassicAddress|rUSE6ZjXKnWDajT8r51a49iwC7pA5Lq5Kg|フックすが有効なテストネット|
+
+## 3. 初期設定
+
+### 3.1. 要件
+
+- Node.js v16 推奨
+
+### 3.2. インストール
+
+まず最初にxrpl.jsをインストールします。
 
 ```bash
 # npmの場合
@@ -41,6 +69,31 @@ $ yarn add xrpl
 インポートをすることで、ライブラリを使用することができます。
 
 ```typescript
+import xrpl from xrpl
+```
+
+## 4. Class Client
+
+rippledサーバーと対話するためのクライアントです。
+
+### 4.1. 使い方
+
+#### 構文
+
+```typescript
+new Client(server, options?): Client
+```
+
+#### パラメータ
+
+- server: `string`
+  - 接続するサーバーのURL
+- options?: `ClientOptions = {}`
+  - クライアント設定のオプション: https://js.xrpl.org/interfaces/ClientOptions.html
+
+#### 使用例
+
+```typescript
 import { Client } from xrpl
 
 async function main() {
@@ -51,25 +104,43 @@ async function main() {
 }
 ```
 
-## xrpl.jsの基本操作
+### 4.2. 新規ウォレット作成
 
-### ネットワークの種類
+#### fundWallet関数
 
-これらのテストネットワークは、実際の資金を使用せずにXRP Ledgerのテストを行うことができます。
+XRPLのテストネット用のユーティリティ関数で、新しいウォレットを作成し、テスト用のXRPを付与する機能を提供します。
 
-|ネットワーク|WebSocket|説明|
-|:---|:---|:--|
-|Testnet|wss://s.altnet.rippletest.net:51233/|メインネット同等|
-|Devnet|wss://s.devnet.rippletest.net:51233/|今後の修正予定の機能を反映。|
-|Xahau-Testnet|wss://xahau-test.net/|フックすが有効なテストネット|
+```typescript
+import { Client } from xrpl
 
-**XRP Faucets**
+async function main() {
+  const client = new Client('wss://s.altnet.rippletest.net:51233')
+  await client.connect()
 
-XRP Ledgerテストネットワークのトークンを発行できるサイト
+  const fundWallet = await client.fundWallet()
+  console.log(fundWallet)
 
-https://xrpl.org/ja/xrp-testnet-faucet.html
+  client.disconnect()
+}
+```
 
-### XRPの送金と受取
+fundWalletのレスポンス
+
+
+```javascript
+{
+  wallet: Wallet {
+    publicKey: 'ED1AA872636AD6ED618AAECB7F387F2234155A28FD89193DE344B6CD4BC4B76C1A',
+    privateKey: 'ED2A2DD166BB2A391BFC76B841A57AC019562FCF8AF5CE22315193A2BBC7688D7C',
+    classicAddress: 'rUSE6ZjXKnWDajT8r51a49iwC7pA5Lq5Kg',
+    seed: 'sEdS6UP2W1h6gnQ4vVkHuBTpa4ChSXD'
+  },
+  balance: 10000
+}
+```
+
+
+### fundWallet
 
 ## トランザクションの処理
 
