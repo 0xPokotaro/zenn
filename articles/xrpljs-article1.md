@@ -44,7 +44,7 @@ https://xrpl.org/ja/xrp-testnet-faucet.html
 
 #### PublicKey (公開鍵)
 
-誰にでも後悔されているアカウント(ウォレット)を識別するための一意のコード。
+PrivateKeyとペアになっているウォレットを識別するための一意のコード。
 アカウント(ウォレット)で署名する際に使用します。
 
 サンプル値: `ED1AA872636AD6ED618AAECB7F387F2234155A28FD89193DE344B6CD4BC4B76C1A`
