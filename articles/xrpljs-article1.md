@@ -42,11 +42,30 @@ https://xrpl.org/ja/xrp-testnet-faucet.html
 
 ### 1.2. アドレスの種類
 
-|アドレス|サンプル|説明|
-|:---|:---|:--|
-|PublicKey|ED1AA872636AD6ED618AAECB7F387F2234155A28FD89193DE344B6CD4BC4B76C1A|メインネット同等|
-|PrivateKey|ED2A2DD166BB2A391BFC76B841A57AC019562FCF8AF5CE22315193A2BBC7688D7C|今後の修正予定の機能を反映。|
-|ClassicAddress|rUSE6ZjXKnWDajT8r51a49iwC7pA5Lq5Kg|フックすが有効なテストネット|
+#### PublicKey (公開鍵)
+
+サンプル値: `ED1AA872636AD6ED618AAECB7F387F2234155A28FD89193DE344B6CD4BC4B76C1A`
+
+誰にでも後悔されているアカウント(ウォレット)を識別するための一意のコード。
+
+アカウント(ウォレット)で署名する際に使用
+
+#### PrivateKey (秘密鍵)
+
+サンプル値: `ED2A2DD166BB2A391BFC76B841A57AC019562FCF8AF5CE22315193A2BBC7688D7C`
+
+PublicKeyとペアになっているウォレットのパスワード。他人に知られてはいけない。
+
+アカウント(ウォレット)にアクセスするために使用します。
+
+#### ClassicAddress (ウォレット)
+
+サンプル値: `rUSE6ZjXKnWDajT8r51a49iwC7pA5Lq5Kg`
+
+公開鍵から生成された、XRP Ledger上のアカウントのアドレス。
+
+XRPやトークンを送るときに使用します。
+
 
 ## 3. 初期設定
 
