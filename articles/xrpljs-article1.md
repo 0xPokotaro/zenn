@@ -44,25 +44,24 @@ https://xrpl.org/ja/xrp-testnet-faucet.html
 
 #### PublicKey (公開鍵)
 
-サンプル値: `ED1AA872636AD6ED618AAECB7F387F2234155A28FD89193DE344B6CD4BC4B76C1A`
-
 誰にでも後悔されているアカウント(ウォレット)を識別するための一意のコード。
 アカウント(ウォレット)で署名する際に使用します。
 
-#### PrivateKey (秘密鍵)
+サンプル値: `ED1AA872636AD6ED618AAECB7F387F2234155A28FD89193DE344B6CD4BC4B76C1A`
 
-サンプル値: `ED2A2DD166BB2A391BFC76B841A57AC019562FCF8AF5CE22315193A2BBC7688D7C`
+#### PrivateKey (秘密鍵)
 
 PublicKeyとペアになっているウォレットのパスワード。他人に知られてはいけない。
 アカウント(ウォレット)にアクセスするために使用します。
 
-#### ClassicAddress (ウォレット)
+サンプル値: `ED2A2DD166BB2A391BFC76B841A57AC019562FCF8AF5CE22315193A2BBC7688D7C`
 
-サンプル値: `rUSE6ZjXKnWDajT8r51a49iwC7pA5Lq5Kg`
+#### ClassicAddress (ウォレット)
 
 公開鍵から生成された、XRP Ledger上のアカウントのアドレス。
 XRPやトークンを送るときに使用します。
 
+サンプル値: `rUSE6ZjXKnWDajT8r51a49iwC7pA5Lq5Kg`
 
 ## 3. 初期設定
 
