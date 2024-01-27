@@ -8,5 +8,5 @@
 新しい記事の作成
 
 ```bash
-npm run create
+pnpm run create
 ```
