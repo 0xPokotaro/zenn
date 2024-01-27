@@ -1,0 +1,28 @@
+---
+title: "📘 XRPLとは何か"
+---
+
+# xxxxxとは？
+
+## 専門用語
+
+### AMM
+
+### Sidechain
+
+- Xahau: https://xahau.network/
+- EVM Sidechan: https://opensource.ripple.com/docs/evm-sidechain/intro-to-evm-sidechain/?__hstc=78174987.f6a2546ad2b2889c58acec6f67dced9e.1706335835676.1706335835676.1706335835676.1&__hssc=78174987.18.1706335835676&__hsfp=2207761794
+
+# ネットワーク
+
+|ネットワーク|ID|
+|---|---|
+|Mainnet|0|
+|Testnet|1|
+|Devnet||2|
+|AMM Devnet|25|
+|Sidechains Devnet Locking Chain|2551|
+|Sidechains Devnet Issuing Chain|2552|
+|Hooks V3 Testnet|21338|
+
+https://xrpl.org/ja/transaction-common-fields.html#networkid%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E3%83%89
