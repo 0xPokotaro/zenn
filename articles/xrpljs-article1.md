@@ -40,7 +40,14 @@ XRP Ledgerテストネットワークのトークンを発行できるサイト
 
 https://xrpl.org/ja/xrp-testnet-faucet.html
 
-### 1.2. アドレスの種類
+### 1.2. アカウントに紐づく情報
+
+#### ClassicAddress (ウォレット)
+
+公開鍵から生成された、XRP Ledger上のアカウントのアドレス。
+XRPやトークンを送るときに使用します。
+
+サンプル値: `rUSE6ZjXKnWDajT8r51a49iwC7pA5Lq5Kg`
 
 #### PublicKey (公開鍵)
 
@@ -56,12 +63,12 @@ PublicKeyとペアになっているウォレットのパスワード。他人�
 
 サンプル値: `ED2A2DD166BB2A391BFC76B841A57AC019562FCF8AF5CE22315193A2BBC7688D7C`
 
-#### ClassicAddress (ウォレット)
+#### Seed（シード）
 
-公開鍵から生成された、XRP Ledger上のアカウントのアドレス。
-XRPやトークンを送るときに使用します。
+PublicKey, PrivateKeyを生成するための基礎となるパスワード。他人に知られてはいけない。
+ウォレットの復元に使用します。
 
-サンプル値: `rUSE6ZjXKnWDajT8r51a49iwC7pA5Lq5Kg`
+サンプル値: `sEdS6UP2W1h6gnQ4vVkHuBTpa4ChSXD`
 
 ## 3. 初期設定
 
@@ -89,9 +96,9 @@ import xrpl from xrpl
 
 ## 4. 使用方法
 
-rippledサーバーと対話するためのクライアントです。
+### 4.1. Class Client
 
-### 4.1. クライアントの使い方
+rippledサーバーと対話するために使用します。
 
 #### 構文
 
@@ -119,7 +126,7 @@ async function main() {
 }
 ```
 
-### 4.2. 新規ウォレット作成
+#### 4.1.2. 新規ウォレット作成
 
 #### fundWallet関数
 
@@ -132,6 +139,7 @@ async function main() {
   const client = new Client('wss://s.altnet.rippletest.net:51233')
   await client.connect()
 
+  // 新規ウォレット作成
   const fundWallet = await client.fundWallet()
   console.log(fundWallet)
 
@@ -141,10 +149,9 @@ async function main() {
 
 fundWalletのレスポンス
 
-
 ```javascript
 {
-  wallet: Wallet {
+  wallet {
     publicKey: 'ED1AA872636AD6ED618AAECB7F387F2234155A28FD89193DE344B6CD4BC4B76C1A',
     privateKey: 'ED2A2DD166BB2A391BFC76B841A57AC019562FCF8AF5CE22315193A2BBC7688D7C',
     classicAddress: 'rUSE6ZjXKnWDajT8r51a49iwC7pA5Lq5Kg',
@@ -154,8 +161,26 @@ fundWalletのレスポンス
 }
 ```
 
+### 4.3. ウォレットの復元
 
-### fundWallet
+#### Wallet関数
+
+
+
+```typescript
+import { Client } from xrpl
+
+async function main() {
+  const client = new Client('wss://s.altnet.rippletest.net:51233')
+  await client.connect()
+
+  // 新規ウォレット作成
+  const fundWallet = await client.fundWallet()
+  console.log(fundWallet)
+
+  client.disconnect()
+}
+```
 
 ## トランザクションの処理
 
