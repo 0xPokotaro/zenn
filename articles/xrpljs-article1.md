@@ -94,11 +94,9 @@ $ yarn add xrpl
 import xrpl from xrpl
 ```
 
-## 4. 使用方法
+## 4. Class Client
 
-### 4.1. Class Client
-
-rippledサーバーと対話するために使用します。
+Clientは、rippledサーバーと対話するために使用します。
 
 #### 構文
 
@@ -126,7 +124,7 @@ async function main() {
 }
 ```
 
-#### 4.1.2. 新規ウォレット作成
+#### 4.1. 新規ウォレット作成
 
 #### fundWallet関数
 
