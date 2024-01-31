@@ -6,6 +6,12 @@ topics: []
 published: false
 ---
 
+## コンセプト
+
+### Sui Kiosk
+
+作成中
+
 ## suiをインストール
 
 dAppを作成する前にSuiをインストールする必要がある。
