@@ -12,10 +12,40 @@ https://docs.sui.io/concepts/sui-move-concepts
 
 ### 概念
 
-オンチェーンオブジェクト（スマートコントラクトとも呼ばれる）を扱うためのパッケージを作成するオープンソース言語です。
+Moveは、オンチェーンオブジェクト（スマートコントラクト）を扱うためのパッケージを作成するオープンソース言語です。
 
-このプラットフォーム非依存の言語は、異なるデータと実行モデルを持つブロックチェーン間で共有のライブラリ、ツール、開発者コミュニティの実現を可能にします。
+Suiのオブジェクトシステムは、Moveに新機能と新たな制約を加えた拡張が実装されており、これは"Sui Move"とも呼ばれています。
 
-Moveは、それが動作するブロックチェーンのニーズに合わせて適応し、Suiブロックチェーン上での最適化のための改善が行われています。
+Sui Moveで使用できない機能は以下の二点です。
 
-Moveを使用することで、ユーザーレベルの資産を表すプログラム可能なSuiオブジェクトの定義、作成、管理が可能です。SuiのオブジェクトシステムはMoveに新機能を追加し、追加の制約も設けられています。詳細はオブジェクトモデルで確認できます。
+- [Global Storage Operators](https://move-language.github.io/move/global-storage-operators.html)
+- [Key Abilities](https://github.com/move-language/move/blob/main/language/documentation/book/src/abilities.md)
+
+### MoveとSui Moveの主な違い
+
+- Suiは独自のオブジェクト中心のグローバルストレージを使用します。
+- アドレスはオブジェクトIDを表します。
+- Suiオブジェクトにはグローバルに一意のIDがあります。
+- Suiにはモジュール初期化子 (init) があります。
+- Suiエントリーポイントはオブジェクト参照を入力として受け取ります。
+
+### オブジェクト中心のグローバル
+
+作成中
+
+### Object Model
+
+Suiにおけるストレージの基本単位は"オブジェクト"。
+
+Suiのストレージは、一位のIDによってオンチェーンでアドレス指定できるオブジェクトを中心としている。
+
+スマートコントラクトは、オブジェクトで、Suiネットワーク上のオブジェクトを操作する。
+
+- Sui Move Package: Sui Moveのバイトコードモジュールのセット。
+- Sui Move Object: Sui Move Packageで生成される具体的なデータオブジェクト。
+
+### 参考文献
+
+Move book
+https://move-language.github.io/move/introduction.html
+
