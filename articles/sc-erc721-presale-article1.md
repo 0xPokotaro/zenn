@@ -6,7 +6,7 @@ topics: ["Ethereum", "スマートコントラクト"]
 published: false
 ---
 
-# はじめに
+# 1. はじめに
 
 本記事では、「Pillheads NFT」というNFTプロジェクトに実装されたスマートコントラクトのプレセール機能について解説します。
 NFTプロジェクト自体の詳細については割愛します。
@@ -17,12 +17,12 @@ NFTプロジェクト自体の詳細については割愛します。
 - [OpenSea - Pillheads NFT](https://opensea.io/ja/collection/pillheadsnft)
 - [Etherscan - PILLHEADS](https://etherscan.io/address/0x1b23d0f0f6dc3547c1b6945152acbfd6eaad85b0#code)
 
-## プレセールとは
+## 1.2. プレセールとは
 
 NFTのプレセールは、公式販売前に特定グループに先行してNFTを低価格で提供する期間です。
 プレセールを行うことで、プロジェクトへの早期支持を集め、資金調達とコミュニティ構築を目指します。
 
-## Pillheads NFTのプレセール機能
+## 1.3. Pillheads NFTのプレセール機能
 
 1. プレセール価格設定
    - `setPresalePrice()` : プレセールの価格を設定する関数
@@ -36,9 +36,9 @@ NFTのプレセールは、公式販売前に特定グループに先行してNF
    - `mintPresale1()`: プレセール(Phase1)中にミントをする関数
    - `mintPresale2()`: プレセール(Phase2)中にミントをする関数
 
-# スマートコントラクト
+# 2. スマートコントラクト
 
-## プレセール価格設定
+## 2.1. プレセール価格設定
 
 `setPresalePrice`関数を使用して、プレセール時のNFT価格を設定できます。
 また関数は、管理者のみが実行できるように制御されています。
@@ -55,7 +55,7 @@ function setPresalePrice(uint256 price) external onlyAdmin {
 }
 ```
 
-## プレセール期間設定
+## 2.2. プレセール期間設定
 
 `setPresale1ActivationTime`関数と`setPresale2ActivationTime`関数を使用して、プレセールの開始時刻を設定できます。
 また関数は、管理者のみが実行できるように制御されています。
@@ -80,7 +80,7 @@ function setPresale2ActivationTime(uint256 timestampInSeconds) external onlyAdmi
 }
 ```
 
-## 参加資格設定
+## 2.3. 参加資格設定
 
 参加資格は、OpenZeppelinのMerkleProofという仕組みを利用して管理されています。
 この仕組みを使用することで、スマートコントラクト側で参加者リストを保持する必要がなく、bytes32型の文字列(通称: MerkeRoot)を保持するだけで資格の検証が可能です。
@@ -109,7 +109,9 @@ function setPresale2MerkleRoot(bytes32 newRoot) external onlyAdmin {
 }
 ```
 
-## プレセール用ミント
+## 2.4. プレセール用ミント
+
+`mintPresale1`関数と`mintPresale2`関数を使用して、プレセール期間にミントを行えます。
 
 ```solidity
 /// プレセール(Phase1)のミント関数
@@ -152,13 +154,6 @@ function mintPresale1(
     // プレセール(Phase1)での再参加を防ぐためのフラグを設定
     unchecked { presale1Claimed[msg.sender] = true; }
 }
-```
-
-### 修飾子
-
-```solidity
-public /// 公開関数
-payable /// Etherを送金することができる
 ```
 
 ### バリデーション
