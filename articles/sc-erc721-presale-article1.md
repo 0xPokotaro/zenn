@@ -1,9 +1,9 @@
 ---
-title: "【スマートコントラクト】NFTプレセール機能の実装"
+title: "【スマートコントラクト】NFTプレセール機能の実装(Pillheads NFT)"
 emoji: "😎"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["Ethereum", "スマートコントラクト"]
-published: false
+topics: ["Ethereum", "スマートコントラクト", "Solidity", "NFT", "ERC721", "Tech"]
+published: true
 ---
 
 # 1. はじめに
@@ -23,6 +23,8 @@ NFTのプレセールは、公式販売前に特定グループに先行してNF
 プレセールを行うことで、プロジェクトへの早期支持を集め、資金調達とコミュニティ構築を目指します。
 
 ## 1.3. Pillheads NFTのプレセール機能
+
+プレセールは、Phase1とPhase2の二段階で実施することができます。
 
 1. プレセール価格設定
    - `setPresalePrice()` : プレセールの価格を設定する関数
@@ -112,6 +114,7 @@ function setPresale2MerkleRoot(bytes32 newRoot) external onlyAdmin {
 ## 2.4. プレセール用ミント
 
 `mintPresale1`関数と`mintPresale2`関数を使用して、プレセール期間にミントを行えます。
+ミント関数を行う前に、事前に登録されたMerkleRootを用いて、参加者資格を検証します。
 
 ```solidity
 /// プレセール(Phase1)のミント関数
@@ -132,12 +135,19 @@ function mintPresale1(
     public
     payable
 {
+    // プレセール(Phase1)が開始されていない場合はエラー
     require(presale1Activated(), "TooEarly");
+    // ミント数がTotalSupplyを超えている場合はエラー
     require(amount <= mintsLeft, "ExceedsSupply");
+    // 支払い金額が販売金額と一致しない場合はエラー
     require(presalePrice * amount == msg.value, "BadPrice");
+    // 署名が有効でない場合はエラー
     require(verify(msg.sender, sigV, sigR, sigS) == true, "BadSignature");
+    // プレセール(Phase1)のMerkleProofが一致しない場合はエラー
     require(checkPresale1MerkleProof(merkleProof, maxMints), "BadProof");
+    // ミント数が最大ミント数以上の場合はエラー
     require(amount <= maxMints, "ExceedsPresaleMax");
+    // 既にミント済みアカウントの場合はエラー
     require(!presale1Claimed[msg.sender], "Claimed");
 
     // amountの回数分、ミント処理
@@ -146,6 +156,7 @@ function mintPresale1(
         // TokenID = MINTS_MAX - mintsLeft + 1
         _safeMint(msg.sender, MINTS_MAX - mintsLeft + 1);
         // ミントされたトークンの数を減らす（オーバーフローチェックを無効）
+        // オーバーフローチェックを無効にすることでガス代を節約することができます
         unchecked { mintsLeft--; }
         // 次のトークンに進む（オーバーフローチェックを無効）
         unchecked { i++; }
@@ -155,27 +166,6 @@ function mintPresale1(
     unchecked { presale1Claimed[msg.sender] = true; }
 }
 ```
-
-### バリデーション
-
-```solidity
-// プレセール(Phase1)が開始されていない場合はエラー
-require(presale1Activated(), "TooEarly");
-// ミント数がTotalSupplyを超えている場合はエラー
-require(amount <= mintsLeft, "ExceedsSupply");
-// 支払い金額が販売金額と一致しない場合はエラー
-require(presalePrice * amount == msg.value, "BadPrice");
-// 署名が有効でない場合はエラー
-require(verify(msg.sender, sigV, sigR, sigS) == true, "BadSignature");
-// プレセール(Phase1)のMerkleProofが一致しない場合はエラー
-require(checkPresale1MerkleProof(merkleProof, maxMints), "BadProof");
-// ミント数が最大ミント数以上の場合はエラー
-require(amount <= maxMints, "ExceedsPresaleMax");
-// 既にミント済みアカウントの場合はエラー
-require(!presale1Claimed[msg.sender], "Claimed");
-```
-
-# 関数: mintPresale2
 
 ```solidity
 /// プレセール(Phase2)のミント関数
@@ -194,49 +184,42 @@ function mintPresale2(
     public
     payable
 {
+    // プレセール(Phase2)が開始されていない場合はエラー
     require(presale2Activated(), "TooEarly");
+    // ミント数がTotalSupplyを超えている場合はエラー
     require(amount <= mintsLeft, "ExceedsSupply");
+    // 支払い金額が販売金額と一致しない場合はエラー
     require(presalePrice * amount == msg.value, "BadPrice");
+    // 署名が有効でない場合はエラー
     require(verify(msg.sender, sigV, sigR, sigS) == true, "BadSignature");
+    // プレセール(Phase2)のMerkleProofが一致しない場合はエラー
     require(checkPresale2MerkleProof(merkleProof), "BadProof");
+    // ミント数が2以上の場合はエラー
     require(amount <= 2, "ExceedsPresaleMax");
+    // 既にミント済みアカウントの場合はエラー
     require(!presale2Claimed[msg.sender], "Claimed");
 
     // mint their tokens
     for(uint i; i < amount;) {
-      // reduce the total pop after minting
-      _safeMint(msg.sender, MINTS_MAX - mintsLeft + 1);
-      unchecked { mintsLeft--; }
-      unchecked { i++; }
+        // 第一引数にNFTを受け取るアカウント、第二引数にTokenIDを指定してミントを実行
+        // TokenID = MINTS_MAX - mintsLeft + 1
+        _safeMint(msg.sender, MINTS_MAX - mintsLeft + 1);
+        // ミントされたトークンの数を減らす（オーバーフローチェックを無効）
+        unchecked { mintsLeft--; }
+        // 次のトークンに進む（オーバーフローチェックを無効）
+        unchecked { i++; }
     }
 
-    // lock them out of re-entering presale 2
+    // プレセール(Phase2)での再参加を防ぐためのフラグを設定
     unchecked { presale2Claimed[msg.sender] = true; }
   }
 ```
 
-### 修飾子
+# 3. まとめ
 
-```solidity
-public /// 公開関数
-payable /// Etherを送金することができる
-```
+今回は、スマートコントラクトに実装されているプレセール機能について詳しく解説しました。
+プレセール機能はNFTやトークンの先行販売を効率的に管理するために重要で、限定的な販売やコミュニティの早期参加者への特典提供など、様々な目的で利用されます。
 
-### バリデーション
+今回紹介した「Pillheads NFT」の例は、特別な条件を設定してアクセス権限を管理する方法を含め、プレセールの基本的な枠組みを提供しつつ、プロジェクト固有のニーズに応じたカスタマイズが可能であることを示しています。
 
-```solidity
-// プレセール(Phase2)が開始されていない場合はエラー
-require(presale2Activated(), "TooEarly");
-// ミント数がTotalSupplyを超えている場合はエラー
-require(amount <= mintsLeft, "ExceedsSupply");
-// 支払い金額が販売金額と一致しない場合はエラー
-require(presalePrice * amount == msg.value, "BadPrice");
-// 署名が有効でない場合はエラー
-require(verify(msg.sender, sigV, sigR, sigS) == true, "BadSignature");
-// プレセール(Phase2)のMerkleProofが一致しない場合はエラー
-require(checkPresale2MerkleProof(merkleProof), "BadProof");
-// ミント数が2以上の場合はエラー
-require(amount <= 2, "ExceedsPresaleMax");
-// 既にミント済みアカウントの場合はエラー
-require(!presale2Claimed[msg.sender], "Claimed");
-```
+このような技術的な詳細を理解し、プロジェクトに沿ったプレセール機能を実装していくことが大切です。
