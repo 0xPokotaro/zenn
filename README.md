@@ -5,8 +5,10 @@
 
 ## Commands
 
-新しい記事の作成
-
 ```bash
+# 新しい記事の作成
 pnpm run create
+
+# 記事のプレビュー
+pnpm zenn preview
 ```
