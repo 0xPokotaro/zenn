@@ -1,5 +1,5 @@
 ---
-title: "【スマートコントラクト】プレセール機能"
+title: "【スマートコントラクト】NFTプレセール機能の実装"
 emoji: "😎"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Ethereum", "スマートコントラクト"]
