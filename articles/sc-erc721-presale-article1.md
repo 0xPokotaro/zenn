@@ -2,7 +2,7 @@
 title: "【スマートコントラクト】NFTプレセール機能の実装(Pillheads NFT)"
 emoji: "😎"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["Ethereum", "スマートコントラクト", "Solidity", "NFT", "ERC721", "Tech"]
+topics: ["Ethereum", "スマートコントラクト", "Solidity", "NFT", "ERC721"]
 published: true
 ---
 
@@ -26,17 +26,25 @@ NFTのプレセールは、公式販売前に特定グループに先行してNF
 
 プレセールは、Phase1とPhase2の二段階で実施することができます。
 
+##### プレセール仕様
+
+- Phase1とPhase2の二段階でプレセールを実施することができます。
+- Phase1とPhase2では、ミントできる数量が異なります。
+- 参加資格がある場合、各Phaseにおいて一度だけミントすることができます。
+
+##### プレセール機能一覧
+
 1. プレセール価格設定
-   - `setPresalePrice()` : プレセールの価格を設定する関数
+   - プレセール時のNFT価格を設定することができます。
 2. プレセール期間設定
-   - `setPresale1ActivationTime()`: プレセール(Phase1)の開始日時を設定する関数
-   - `setPresale2ActivationTime()`: プレセール(Phase2)の開始日時を設定する関数
+   - プレセール(Phase1)の開始日時を設定することができます。
+   - プレセール(Phase2)の開始日時を設定することができます。
 3. 参加資格設定
-   - `setPresale1MerkleRoot()`: プレセール(Phase1)の参加資格を検証するMerkleRootを設定する関数
-   - `setPresale2MerkleRoot()`: プレセール(Phase2)の参加資格を検証するMerkleRootを設定する関数
+   - プレセール(Phase1)の参加資格を管理、検証することができます。
+   - プレセール(Phase2)の参加資格を管理、検証することができます。
 4. プレセール用ミント
-   - `mintPresale1()`: プレセール(Phase1)中にミントをする関数
-   - `mintPresale2()`: プレセール(Phase2)中にミントをする関数
+   - プレセール(Phase1)でのミントが可能です。
+   - プレセール(Phase2)でのミントが可能です。
 
 # 2. スマートコントラクト
 
@@ -66,10 +74,10 @@ function setPresalePrice(uint256 price) external onlyAdmin {
 `presale1ActivationTime`変数と`presale2ActivationTime`変数には、初期値が設定されています。
 
 ```solidity
-// 初期値: プレセール(Phase1) 2022年6月16日 20:20
-uint256 public presale1ActivationTime = 1655410800;
-// 初期値: プレセール(Phase2) 2022年6月18日 20:20
-uint256 public presale2ActivationTime = 1655583600;
+// 初期値: プレセール(Phase1) UNIXタイムスタンプ
+uint256 public presale1ActivationTime = 1655410800; // 2022年6月16日 20:20
+// 初期値: プレセール(Phase2) UNIXタイムスタンプ
+uint256 public presale2ActivationTime = 1655583600; // 2022年6月18日 20:20
 
 /// @dev プレセール(Phase1)の開始時刻を設定する関数
 /// @param timestampInSeconds 新しい開始時刻(UNIXタイムスタンプ)
