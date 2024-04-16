@@ -2,7 +2,7 @@
 title: "NFT開発基礎知識（実装編）"
 emoji: "😺"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: [”NFT”]
+topics: [NFT]
 published: true
 ---
 # 概要
