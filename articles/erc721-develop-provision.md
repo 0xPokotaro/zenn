@@ -18,6 +18,7 @@ NFT開発に必要なものをまとめました。以下の事前準備をお�
 |エディター|VSCode|任意のエディターをご利用ください。|
 |ウォレット|Metamask|デプロイ時にウォレットを使用します。|
 |Node Providor|AllThatNode|デプロイする際に必要となります。|
+|Explorer|Etherscan|スマートコントラクトのコードを公開する際に必要となります。|
 
 # 1. Node.jsのインストール
 
@@ -50,3 +51,9 @@ https://www.allthatnode.com/
 アカウント新規作成後、以下のドキュメントからEthereumの追加をお願いします。
 
 https://docs.allthatnode.com/docs/getting-started-with-endpoints
+
+# 5. EtherscanのAPI KEYを取得
+
+以下の記事を参考にAPI KEYの取得をお願いします。
+
+https://qiita.com/taijusanagi/items/c34d14767feeb3e131a8
